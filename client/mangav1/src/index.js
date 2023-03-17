@@ -5,7 +5,7 @@ import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <div className="w-screen h-full min-h-screen bg-gray-200">
+  <div className="bg-gray-200">
     <App />
   </div>
 );

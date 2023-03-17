@@ -1,75 +1,4 @@
-const scraperCategory = (browser, url) =>
-  new Promise(async (res, reject) => {
-    try {
-      let page = await browser.newPage();
-      console.log(">> mo tab moi...");
-      await page.goto(url);
-      console.log(">> truy cap vao " + url);
-      await page.waitForSelector(".header");
-      console.log(">> web da load");
-
-      const dataCategory = await page.$$eval(
-        ".ModuleContent > ul > li",
-        (els) => {
-          dataCategory = els.map((el) => {
-            return {
-              category: el.querySelector("a").innerText,
-              link: el.querySelector("a").href,
-            };
-          });
-          return dataCategory;
-        }
-      );
-      //console.log(dataCategory);
-      await page.close();
-      console.log(">> tab da dong ");
-      res(dataCategory);
-    } catch (error) {
-      console.log("loi o scaper " + error);
-      reject(error);
-    }
-  });
-
-const scraper = (browser, url) =>
-  new Promise(async (res, reject) => {
-    try {
-      let newPage = await browser.newPage();
-      console.log(">> da mo tab moi...");
-      await newPage.goto(url);
-      console.log(">> da truy cap vao trang " + url);
-      await newPage.waitForSelector(".items");
-      console.log(">> da load xong trang moi...");
-
-      const scraperData = {};
-
-      /// lay title
-      const title = await newPage.$eval("h1", (el) => {
-        return el.innerText;
-      });
-      scraperData.title = title;
-      //console.log(scraperData.title)
-      /// lay list item
-      const items = await newPage.$$eval(".row > .item", (els) => {
-        items = els.map((item) => {
-          const img = item.querySelector("figure > .image > a > img");
-
-          return {
-            img: img.src,
-            title: img.alt,
-          };
-        });
-
-        return items;
-      });
-      console.log(items);
-
-      //await browser.close();
-      //console.log(">> trinh duyet da dong ");
-      res();
-    } catch (error) {
-      console.log("loi o scraper " + error);
-    }
-  });
+const convert_param = require("./parse/parse_name");
 
 const scraper_Chapter = (browser, url) =>
   new Promise(async (res, reject) => {
@@ -83,6 +12,27 @@ const scraper_Chapter = (browser, url) =>
 
       const scraperData = {};
 
+      const detail = await newPage.$$eval(".reading > .container", (els) => {
+        detail = els[0]?.querySelector(".top");
+
+        const page = "https://www.nettruyenvt.com";
+
+        const name_manga = {
+          name_detail: detail.querySelector("h1 a").innerText,
+          href: detail.querySelector("h1 a").href.replace(page, ""),
+        };
+
+        const chapter = detail.querySelector("h1 span").innerText;
+
+        const update_time = detail.querySelector("i")?.innerText;
+
+        return {
+          name: name_manga,
+          chapter: chapter,
+          update_time: update_time,
+        };
+      });
+
       const pages = await newPage.$$eval(
         ".reading-detail.box_doc > .page-chapter",
         (els) => {
@@ -95,9 +45,12 @@ const scraper_Chapter = (browser, url) =>
           return pages;
         }
       );
+
+      scraperData.pages = pages;
+      scraperData.detail = detail
       await browser.close();
       console.log(">> trinh duyet da dong ");
-      res(pages);
+      res(scraperData);
     } catch (error) {
       console.log("loi o scraper " + error);
     }
@@ -152,9 +105,12 @@ const scraper_MangaDetail = (browser, url) =>
         ".detail-info > .row > .col-xs-8.col-info > ul.list-info > li.author.row > p.col-xs-8 > a",
         (els) => {
           authors = els.map((el) => {
+            const page = "https://www.nettruyenvt.com";
+            const href = el.href.replace(page, "");
+
             return {
               author: el.innerText,
-              href: el.href,
+              href: href,
             };
           });
           return authors;
@@ -165,9 +121,11 @@ const scraper_MangaDetail = (browser, url) =>
         ".detail-info > .row > .col-xs-8.col-info > ul.list-info > li.kind.row > p.col-xs-8 > a",
         (els) => {
           genres = els.map((el) => {
+            const page = "https://www.nettruyenvt.com";
+            const href = el.href.replace(page, "");
             return {
               genre: el.innerText,
-              href: el.href,
+              href: href,
             };
           });
           return genres;
@@ -181,8 +139,6 @@ const scraper_MangaDetail = (browser, url) =>
         ".detail-content > p",
         (el) => el.innerText
       );
-          
-      
 
       let manga_ChapterDetail = await Page.$$eval(
         ".list-chapter > nav > ul > li",
@@ -210,22 +166,24 @@ const scraper_MangaDetail = (browser, url) =>
         ".list-chapter > nav > ul > li > .col-xs-5.chapter > a",
         (els) => {
           manga_Chapters = els.map((el) => {
+            const page = "https://www.nettruyenvt.com";
+            const href = el.href.replace(page, "");
             return {
               chapter: el.innerText,
-              href: el.href,
+              href: href,
             };
           });
           return manga_Chapters;
         }
       );
-     
+
       scraperData.name = manga_Name;
       scraperData.updateTime = mange_UpdateTime;
       scraperData.image = manga_Image;
       scraperData.info = manga_Info;
       scraperData.detail = manga_Detail;
       scraperData.chaptersDetail = manga_ChapterDetail;
-      scraperData.chapters = manga_Chapters
+      scraperData.chapters = manga_Chapters;
 
       await browser.close();
       console.log(">> trinh duyet da dong ");
@@ -236,8 +194,6 @@ const scraper_MangaDetail = (browser, url) =>
   });
 
 module.exports = {
-  scraperCategory,
-  scraper,
   scraper_Chapter,
   scraper_MangaDetail,
 };
