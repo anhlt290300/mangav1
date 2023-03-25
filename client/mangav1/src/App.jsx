@@ -13,12 +13,16 @@ import ErrorPage from "./component/ErrorPage";
 import Loading from "./component/Loading";
 import axios from "axios";
 import Reading from "./pages/Reading";
+import HotManga from "./pages/HotManga";
+import FindManga from "./pages/FindManga";
 
 const MainLayOut = () => {
   return (
-    <div className="flex flex-col justify-center w-1/2 h-full m-auto bg-white">
+    <div className=" min-h-screen w-full z-0 relative">
       <Header />
-      <Outlet />
+      <div className="desktop-L:px-40 desktop:px-12 tablet:px-4 w-full h-full m-auto bg-black pt-16">
+        <Outlet />
+      </div>
     </div>
   );
 };
@@ -30,9 +34,10 @@ const MangaDetailRouter = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/truyentranh/?id_manga=${id_manga}`)
+      .get(`http://localhost:4000/truyen-tranh/${id_manga}`)
       .then((res) => {
         setData(res.data);
+        //console.log(res.data)
       })
       .catch((err) => {
         setError((error) => true);
@@ -52,9 +57,7 @@ const MangaChapterRouter = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `http://localhost:4000/chapter/?id_manga=${id_manga}&chapter=${chapter}&key=${key}`
-      )
+      .get(`http://localhost:4000/truyen-tranh/${id_manga}/${chapter}/${key}`)
       .then((res) => {
         setData(res.data);
       })
@@ -63,14 +66,14 @@ const MangaChapterRouter = () => {
       });
 
     axios
-      .get(`http://localhost:4000/truyentranh/?id_manga=${id_manga}`)
+      .get(`http://localhost:4000/truyen-tranh/${id_manga}`)
       .then((res) => {
         setChapters(res.data?.chapters);
       })
       .catch((err) => {
         setError((error) => true);
       });
-  }, [id_manga,chapter,key]);
+  }, [id_manga, chapter, key]);
 
   if (error) return <ErrorPage />;
   else if (data !== null && chapters !== null)
@@ -91,6 +94,12 @@ export const App = () => {
           <Route
             path="truyen-tranh/:id_manga/:chapter/:key"
             element={<MangaChapterRouter />}
+          />
+          <Route path="/hot" element={<HotManga />} />
+          <Route path="/tim-truyen" element={<FindManga />} />
+          <Route
+            path="/tim-truyen/:genre"
+            element={<FindManga flagGenre={true} />}
           />
         </Route>
         <Route path="*" element={<ErrorPage />} />

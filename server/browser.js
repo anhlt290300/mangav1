@@ -4,7 +4,7 @@ const startBrowser = async () => {
   let browser;
   try {
     browser = await pupperteer.launch({
-      headless: false,
+      headless: true,
       args: ["--disable-setuid-sanbox"],
       ignoreHTTPSErrors: true,
     });
