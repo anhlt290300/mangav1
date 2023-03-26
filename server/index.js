@@ -8,6 +8,9 @@ const {
   scraperController_FindManga,
   scraperController_HotManga,
   scraperController_HomeManga,
+  scraperController_BoyManga,
+  scraperController_GirlManga,
+  scraperController_AdventedSearch,
 } = require("./scraperController");
 
 const express = require("express");
@@ -25,7 +28,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
 
 // app.get("/truyentranh", async (req, res) => {
 //   try {
@@ -115,6 +117,36 @@ app.get("/hot", async (req, res) => {
     ? `https://www.nettruyenvt.com/hot?page=${page}`
     : `https://www.nettruyenvt.com/hot`;
   const data = await scraperController_HotManga(browser, url);
+  res.status(200).json(data);
+});
+
+app.get("/truyen-con-gai", async (req, res) => {
+  let { page } = req.query;
+  const browser = startBrowser();
+  const url = page
+    ? `https://www.nettruyenvt.com/truyen-con-gai?page=${page}`
+    : `https://www.nettruyenvt.com/truyen-con-gai`;
+  const data = await scraperController_GirlManga(browser, url);
+  res.status(200).json(data);
+});
+
+app.get("/truyen-con-trai", async (req, res) => {
+  let { page } = req.query;
+  const browser = startBrowser();
+  const url = page
+    ? `https://www.nettruyenvt.com/truyen-con-trai?page=${page}`
+    : `https://www.nettruyenvt.com/truyen-con-trai`;
+  const data = await scraperController_BoyManga(browser, url);
+  res.status(200).json(data);
+});
+
+app.get("/tim-truyen-nang-cao", async (req, res) => {
+  let { genres, gender, status, minchapter, sort, page } = req.query;
+  const browser = startBrowser();
+  const url = page
+    ? `https://www.nettruyenvt.com/tim-truyen-nang-cao?genres=${genres}&notgenres=&gender=${gender}&status=${status}&minchapter=${minchapter}&sort=${sort}&page=${page}`
+    : `https://www.nettruyenvt.com/tim-truyen-nang-cao?genres=${genres}&notgenres=&gender=${gender}&status=${status}&minchapter=${minchapter}&sort=${sort}`;
+  const data = await scraperController_AdventedSearch(browser, url);
   res.status(200).json(data);
 });
 

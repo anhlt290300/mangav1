@@ -1,4 +1,7 @@
 const scraper = require("./scraper");
+const scraper_BoyManga = require("./scraper/scraperBoyManga");
+const scraper_GirlManga = require("./scraper/scraperGirlManga");
+const scraper_AdventedSearch = require("./scraper/scraperAdventedSearch");
 const fs = require("fs");
 const scraperController_MangaDetail = async (browserInstance, url) => {
   try {
@@ -156,6 +159,35 @@ const scraperController_HomeManga = async (browserInstance, url) => {
   }
 };
 
+const scraperController_BoyManga = async (browserInstance, url) => {
+  try {
+    let browser = await browserInstance;
+    let data = await scraper_BoyManga(browser, url);
+    return data;
+  } catch (error) {
+    console.log("loi o scapercontroller " + url + " " + error);
+  }
+};
+
+const scraperController_GirlManga = async (browserInstance, url) => {
+  try {
+    let browser = await browserInstance;
+    let data = await scraper_GirlManga(browser, url);
+    return data;
+  } catch (error) {
+    console.log("loi o scapercontroller " + url + " " + error);
+  }
+};
+
+const scraperController_AdventedSearch = async (browserInstance, url) => {
+  try {
+    let browser = await browserInstance;
+    let data = await scraper_AdventedSearch(browser, url);
+    return data;
+  } catch (error) {
+    console.log("loi o scapercontroller " + url + " " + error);
+  }
+};
 // const scapercontroller_MangaInPage = async (
 //   browserInstance,
 //   url,
@@ -279,6 +311,9 @@ module.exports = {
   scraperController_FindManga,
   scraperController_HotManga,
   scraperController_HomeManga,
+  scraperController_BoyManga,
+  scraperController_GirlManga,
+  scraperController_AdventedSearch,
   // scapercontroller_MangaInPage,
   // scapercontroller_MangaFromGenre,
   // scapercontroller_MangaGetAllMangaFromGenres,

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import logo from "../logo_copmanga.png";
 
 export const genres = [
@@ -291,74 +292,197 @@ export const genres = [
   },
 ];
 
+const dataHeader = [
+  {
+    title: "hot",
+    href: "/hot",
+  },
+  {
+    title: "thể loại",
+    href: "/tim-truyen",
+  },
+  {
+    title: "tìm truyện",
+    href: "/tim-truyen-nang-cao",
+  },
+  {
+    title: "con gái",
+    href: "/truyen-con-gai",
+  },
+  {
+    title: "con trai",
+    href: "/truyen-con-trai",
+  },
+];
+
 const Header = () => {
   const [showGenres, SetShowGenres] = useState(false);
   const [description, setDescription] = useState(null);
+  const [openBurger, setOpenBurger] = useState(false);
+  const url = useLocation().pathname;
   return (
-    <div className="z-[999] fixed top-0 left-0 right-0 desktop-L:px-40 desktop:px-12 tablet:px-4 h-16  flex bg-white justify-between items-center font-semibold text-xl">
+    <div className="z-[999] fixed top-0 left-0 right-0 desktop-L:px-40 desktop:px-12 tablet:px-4 px-2 h-16  flex bg-gray-200 justify-between items-center font-semibold desktop-L:text-xl desktop:text-lg text-base select-none">
       <a href="/" className="h-full cursor-pointer">
         <img className="h-full" src={logo} alt="" />
       </a>
-      <nav>
-        <a
-          href="/hot"
-          className="mx-4 cursor-pointer py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
+      <div
+        onClick={() => setOpenBurger((openBurger) => !openBurger)}
+        className=" tablet:hidden block cursor-pointer"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          fill="currentColor"
+          className="bi bi-list"
+          viewBox="0 0 16 16"
         >
-          HOT
-        </a>
-        <a
-          onMouseOver={() => SetShowGenres((showGenres) => true)}
-          onMouseOut={() => SetShowGenres((showGenres) => false)}
-          href="/tim-truyen"
-          className="mx-4 cursor-pointer py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
-        >
-          THỂ LOẠI
-          {showGenres && (
-            <div className="z-[999] shadow-lightRounder absolute top-full left-1/2 -translate-x-1/2 gap-2 grid grid-cols-4 min-w-[35vw] text-black border border-gray-500 rounded text-sm px-6 py-2 font-semibold bg-white">
-              {genres.map((item, index) => {
-                return (
-                  <a
-                    className="hover:text-purple-500"
-                    key={index}
-                    href={item.href}
-                    onMouseOver={() => {
-                      setDescription((description) => item.title);
-                    }}
-                    onMouseOut={() => {
-                      setDescription((description) => null);
-                    }}
-                  >
-                    <p>{item.genre}</p>
-                  </a>
-                );
-              })}
-              {description && (
-                <p className=" col-span-4 border-t border-gray-500 py-2">
-                  {description}
-                </p>
+          <path
+            fillRule="evenodd"
+            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+          />
+        </svg>
+      </div>
+      <nav className=" tablet:block hidden">
+        {dataHeader.map((item, index) => {
+          return (
+            <a
+              key={index}
+              href={item.href}
+              onMouseOver={
+                item.title === "thể loại"
+                  ? () => SetShowGenres((showGenres) => true)
+                  : () => {}
+              }
+              onMouseOut={
+                item.title === "thể loại"
+                  ? () => SetShowGenres((showGenres) => false)
+                  : () => {}
+              }
+              className={
+                url === item.href
+                  ? "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-full after:transition-all after:ease-in after:duration-250"
+                  : "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
+              }
+            >
+              {item.title}
+
+              {showGenres && item.title === "thể loại" && (
+                <div className="z-[999] shadow-lightRounder absolute top-full left-1/2 -translate-x-1/2 gap-2 grid grid-cols-4 min-w-[35vw] text-black border border-gray-500 rounded text-sm px-6 py-2 font-semibold bg-white">
+                  {genres.map((item, index) => {
+                    return (
+                      <a
+                        className="hover:text-purple-500"
+                        key={index}
+                        href={item.href}
+                        onMouseOver={() => {
+                          setDescription((description) => item.title);
+                        }}
+                        onMouseOut={() => {
+                          setDescription((description) => null);
+                        }}
+                      >
+                        <p>{item.genre}</p>
+                      </a>
+                    );
+                  })}
+                  {description && (
+                    <p className=" col-span-4 border-t border-gray-500 py-2">
+                      {description}
+                    </p>
+                  )}
+                </div>
               )}
-            </div>
-          )}
-        </a>
-        <a
-          href="/tim-truyen-nang-cao"
-          className="mx-4 cursor-pointer py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
-        >
-          TÌM TRUYỆN
-        </a>
-        <a
-          href="/truyen-con-gai"
-          className="mx-4 cursor-pointer py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
-        >
-          CON GÁI
-        </a>
-        <a
-          href="/truyen-con-trai"
-          className="mx-4 cursor-pointer py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
-        >
-          CON TRAI
-        </a>
+            </a>
+          );
+        })}
       </nav>
+      <div
+        className={
+          openBurger
+            ? " fixed right-full top-0 w-screen h-screen bg-black transition-all duration-500 ease-in-out translate-x-full overflow-y-auto"
+            : " fixed right-full top-0 w-screen h-screen bg-black transition-all duration-500 ease-in-out overflow-y-auto"
+        }
+      >
+        <nav className="grid grid-cols-1 text-white text-base mt-4">
+          {dataHeader.map((item, index) => {
+            return item.title === "thể loại" ? (
+              <div
+                key={index}
+                onClick={
+                  item.title === "thể loại"
+                    ? () => SetShowGenres((showGenres) => !showGenres)
+                    : () => {}
+                }
+                className={
+                  url === item.href
+                    ? "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-white after:h-1 after:w-full after:transition-all after:ease-in after:duration-250"
+                    : "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-white after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
+                }
+              >
+                {item.title}
+                {showGenres && (
+                  <div className="shadow-lightRounder gap-2 grid grid-cols-2 min-w-full border border-white rounded text-xs px-2 py-2 font-semibold text-white">
+                    {genres.map((item, index) => {
+                      return (
+                        <a
+                          className="hover:text-purple-500"
+                          key={index}
+                          href={item.href}
+                          onMouseOver={() => {
+                            setDescription((description) => item.title);
+                          }}
+                          onMouseOut={() => {
+                            setDescription((description) => null);
+                          }}
+                        >
+                          <p>{item.genre}</p>
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a
+                key={index}
+                href={item.href}
+                onClick={
+                  item.title === "thể loại"
+                    ? () => SetShowGenres((showGenres) => false)
+                    : () => {}
+                }
+                className={
+                  url === item.href
+                    ? "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-full after:transition-all after:ease-in after:duration-250"
+                    : "mx-4 cursor-pointer uppercase py-2 relative after:absolute after:left-0 after:bottom-0 after:bg-slate-900 after:h-1 after:w-0 hover:after:w-full after:transition-all after:ease-in after:duration-250"
+                }
+              >
+                {item.title}
+              </a>
+            );
+          })}
+        </nav>
+        {openBurger ? (
+          <div
+            onClick={() => setOpenBurger((openBurger) => !openBurger)}
+            className=" fixed top-5 right-5 text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              className="bi bi-x-lg"
+              viewBox="0 0 16 16"
+            >
+              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+            </svg>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };

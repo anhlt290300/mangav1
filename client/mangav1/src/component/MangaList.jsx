@@ -8,7 +8,9 @@ const MangaList = ({
   current,
   title,
   url,
+  isSearch,
 }) => {
+  //console.log(isSearch)
   const data = dataMangaUpdate;
   return (
     <div className="w-full bg-white">
@@ -95,7 +97,11 @@ const MangaList = ({
         )}
         {pages && current !== 1 && (
           <a
-            href={`${url}?page=${Number(current) - 1}`}
+            href={
+              isSearch
+                ? `${url}&page=${Number(current) - 1}`
+                : `${url}?page=${Number(current) - 1}`
+            }
             className="tablet:w-12 tablet:h-12 w-10 h-10 rounded border border-black flex items-center justify-center mx-1 cursor-pointer hover:bg-gray-400"
           >
             <svg
@@ -126,7 +132,9 @@ const MangaList = ({
               >
                 <a
                   className="w-full h-full flex items-center justify-center"
-                  href={`${url}?page=${item}`}
+                  href={
+                    isSearch ? `${url}&page=${item}` : `${url}?page=${item}`
+                  }
                 >
                   <p>{item}</p>
                 </a>
@@ -135,7 +143,11 @@ const MangaList = ({
           })}
         {pages && current !== lastPage.page && (
           <a
-            href={`${url}?page=${Number(current) + 1}`}
+            href={
+              isSearch
+                ? `${url}&page=${Number(current) + 1}`
+                : `${url}?page=${Number(current) + 1}`
+            }
             alt="trang ke tiep"
             className="tablet:w-12 tablet:h-12 w-10 h-10 rounded border border-black flex items-center justify-center mx-1 cursor-pointer hover:bg-gray-400"
           >
@@ -156,7 +168,11 @@ const MangaList = ({
         )}
         {pages && current < lastPage.page - 1 && (
           <a
-            href={`${url}?page=${lastPage.page}`}
+            href={
+              isSearch
+                ? `${url}&page=${lastPage.page}`
+                : `${url}?page=${lastPage.page}`
+            }
             alt="trang ke tiep"
             className="tablet:w-12 tablet:h-12 w-10 h-10 rounded border border-black flex items-center justify-center mx-1 cursor-pointer hover:bg-gray-400"
           >
@@ -191,6 +207,7 @@ MangaList.prototype = {
   current: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+  isSearch: PropTypes.bool,
 };
 
 export default MangaList;

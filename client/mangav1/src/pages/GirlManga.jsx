@@ -3,26 +3,26 @@ import axios from "axios";
 import TopManga from "../component/TopManga";
 import MangaList from "../component/MangaList";
 import HistoryReading from "../component/HistoryReading";
+import Loading from '../component/Loading'
 import { useLocation } from "react-router-dom";
-import Loading from "../component/Loading";
-const HotManga = () => {
+const GirlManga = () => {
   const [dataTopManga, setDataTopManga] = useState(null);
 
-  const [dataHotManga, setDataHotManga] = useState(null);
+  const [dataGirlManga, setDataGirlManga] = useState(null);
   const [pages_, setPages_] = useState(null);
   const [lastPage, setLastPage] = useState(null);
   const [current, setCurrent] = useState(1);
 
   const param = useLocation().search;
   const url = useLocation().pathname;
-  //console.log(url + param);
+  console.log(url + param);
   useEffect(() => {
     axios
       .get(`http://localhost:4000${url + param}`)
       .then((res) => {
-        let { topmangas, hotmangas, pages } = res.data;
+        let { topmangas, girlmangas, pages } = res.data;
         let { page, href } = pages;
-        setDataHotManga(hotmangas);
+        setDataGirlManga(girlmangas);
         setDataTopManga(topmangas);
         setLastPage({
           page: page,
@@ -61,10 +61,9 @@ const HotManga = () => {
       })
       .catch((err) => alert(err));
   }, [param, url]);
-
-  if (dataTopManga)
+  if (dataGirlManga)
     return (
-      <div className=" relative z-0 min-h-screen">
+      <div className=" relative z-0">
         <TopManga dataTopManga={dataTopManga} />
         <div className=" desktop:grid desktop:grid-cols-3 desktop:gap-4 bg-white pt-4">
           <div className=" desktop:col-span-2 mx-4">
@@ -73,7 +72,7 @@ const HotManga = () => {
               pages={pages_}
               lastPage={lastPage}
               current={current}
-              dataMangaUpdate={dataHotManga}
+              dataMangaUpdate={dataGirlManga}
               url={url}
             />
           </div>
@@ -83,7 +82,7 @@ const HotManga = () => {
         </div>
       </div>
     );
-  if (!dataHotManga) return <Loading />;
+  if (!dataGirlManga) return <Loading />;
 };
 
-export default HotManga;
+export default GirlManga;

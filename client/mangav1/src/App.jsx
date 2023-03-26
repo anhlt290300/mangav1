@@ -15,14 +15,19 @@ import axios from "axios";
 import Reading from "./pages/Reading";
 import HotManga from "./pages/HotManga";
 import FindManga from "./pages/FindManga";
+import BoyManga from "./pages/BoyManga";
+import GirlManga from "./pages/GirlManga";
+import AdvencedSearch from "./pages/AdvencedSearch";
+import ScrollTop from "./component/ScrollTop";
 
 const MainLayOut = () => {
   return (
     <div className=" min-h-screen w-full z-0 relative">
       <Header />
-      <div className="desktop-L:px-40 desktop:px-12 tablet:px-4 w-full h-full m-auto bg-black pt-16">
+      <div className="desktop-L:px-40 desktop:px-12 tablet:px-4 w-full h-full m-auto bg-gray-100 pt-20">
         <Outlet />
       </div>
+      <ScrollTop />
     </div>
   );
 };
@@ -97,10 +102,10 @@ export const App = () => {
           />
           <Route path="/hot" element={<HotManga />} />
           <Route path="/tim-truyen" element={<FindManga />} />
-          <Route
-            path="/tim-truyen/:genre"
-            element={<FindManga flagGenre={true} />}
-          />
+          <Route path="/tim-truyen/:genre" element={<FindManga />} />
+          <Route path="/truyen-con-gai" element={<GirlManga />} />
+          <Route path="/truyen-con-trai" element={<BoyManga />} />
+          <Route path="/tim-truyen-nang-cao" element={<AdvencedSearch />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </Routes>

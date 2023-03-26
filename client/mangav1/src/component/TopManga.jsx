@@ -112,7 +112,7 @@ const TopManga = ({ dataTopManga }) => {
                       <p className=" whitespace-nowrap text-center">
                         {item.name}
                       </p>
-                      <div className="flex items-center justify-center desktop-L:text-base desktop:text-sm tablet:text-xs mobile-S:text-sm text-xs">
+                      <div className="flex items-center justify-center desktop:text-sm tablet:text-xs mobile-S:text-sm text-xs">
                         <a
                           className="hover:text-blue-500"
                           href={item.href_chapter}

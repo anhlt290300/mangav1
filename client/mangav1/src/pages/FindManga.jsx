@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import MangaList from "../component/MangaList";
 import { genres } from "../component/Header";
+import Loading from "../component/Loading";
 
-const FindManga = ({ flagGenre }) => {
+const FindManga = () => {
   const url = useLocation().pathname + useLocation().search;
   const param = useLocation().search;
   const genre = useParams().genre;
-  console.log(genre);
   const [data, setData] = useState(null);
   const [pages_, setPages_] = useState(null);
   const [lastPage, setLastPage] = useState(null);
@@ -61,9 +60,8 @@ const FindManga = ({ flagGenre }) => {
       })
       .catch((err) => {});
   }, [url, param]);
-  return (
-    data &&
-    pages_ && (
+  if (data)
+    return (
       <div className=" relative z-0">
         <div className=" desktop:grid desktop:grid-cols-3 desktop:gap-4 bg-white pt-4 px-4">
           <div className=" desktop:col-span-2">
@@ -120,12 +118,8 @@ const FindManga = ({ flagGenre }) => {
           </div>
         </div>
       </div>
-    )
-  );
-};
-
-FindManga.propTypes = {
-  flagGenre: PropTypes.bool,
+    );
+  if (!data) return <Loading />;
 };
 
 export default FindManga;
