@@ -3,6 +3,7 @@ import axios from "axios";
 import TopManga from "../component/TopManga";
 import MangaList from "../component/MangaList";
 import HistoryReading from "../component/HistoryReading";
+import Loading from "../component/Loading";
 import { useLocation } from "react-router-dom";
 const Home = () => {
   const [dataTopManga, setDataTopManga] = useState(null);
@@ -58,10 +59,8 @@ const Home = () => {
       .catch((err) => alert(err));
   }, [param, url]);
 
-  return (
-    dataTopManga &&
-    dataMangaUpdate &&
-    pages_ && (
+  if (dataMangaUpdate)
+    return (
       <div className=" relative z-0">
         <TopManga dataTopManga={dataTopManga} />
         <div className=" desktop:grid desktop:grid-cols-3 desktop:gap-4 bg-white pt-4">
@@ -80,8 +79,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-    )
-  );
+    );
+  if (!dataMangaUpdate) return <Loading />;
 };
 
 export default Home;
