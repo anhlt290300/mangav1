@@ -22,7 +22,7 @@ import ScrollTop from "./component/ScrollTop";
 
 const MainLayOut = () => {
   return (
-    <div className=" min-h-screen w-full z-0 relative">
+    <div className=" min-h-screen w-full z-0 relative select-none">
       <Header />
       <div className="desktop-L:px-40 desktop:px-12 tablet:px-4 w-full h-full m-auto bg-gray-100 pt-20">
         <Outlet />
