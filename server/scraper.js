@@ -46,8 +46,15 @@ const scraper_Chapter = (browser, url) =>
         }
       );
 
+      const image = await newPage.$$eval("meta", (els) => {
+        let item = els[10];
+
+        return item.getAttribute("content");
+      });
+
       scraperData.pages = pages;
       scraperData.detail = detail;
+      scraperData.image = image;
       await newPage.close();
       await browser.close();
       res(scraperData);
@@ -88,9 +95,11 @@ const scraper_MangaDetail = (browser, url) =>
             "ul.list-info li.status.row p.col-xs-8"
           ).innerText;
 
-          const view = el.querySelectorAll("ul.list-info li.row")[
-            el.querySelectorAll("ul.list-info li.row").length - 1
-          ].querySelector("p.col-xs-8").innerText;
+          const view = el
+            .querySelectorAll("ul.list-info li.row")
+            [
+              el.querySelectorAll("ul.list-info li.row").length - 1
+            ].querySelector("p.col-xs-8").innerText;
 
           return {
             status: status,

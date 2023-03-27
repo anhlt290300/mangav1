@@ -63,8 +63,8 @@ const Home = () => {
     return (
       <div className=" relative z-0">
         <TopManga dataTopManga={dataTopManga} />
-        <div className=" desktop:grid desktop:grid-cols-3 desktop:gap-4 bg-white pt-4">
-          <div className=" desktop:col-span-2 px-4">
+        <div className=" desktop:grid desktop:grid-cols-3 desktop:gap-4 bg-white pt-4 px-4">
+          <div className=" desktop:col-span-2">
             <MangaList
               title="Truyện mới cập nhật"
               pages={pages_}
@@ -75,7 +75,7 @@ const Home = () => {
             />
           </div>
           <div className="">
-            <HistoryReading />
+            <HistoryReading short={true} />
           </div>
         </div>
       </div>

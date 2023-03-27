@@ -14,7 +14,7 @@ const ScrollTop = () => {
     const moveTostart = setInterval(() => {
       //console.log(scrollY)
       const y = window.scrollY;
-      window.scrollTo(0, y - 50);
+      window.scrollTo(0, y - 200);
       if (y < 100) {
         window.scrollTo(0, 0);
         clearTimeout(moveTostart);

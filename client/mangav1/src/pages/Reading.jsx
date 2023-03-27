@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateList } from "../redux/historySlice";
 
 const Reading = ({ data, chapters }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { pages, detail } = data;
+  const href_chapter = useLocation().pathname;
+  const { pages, detail, image } = data;
   const { name, chapter, update_time } = detail;
   const { name_detail, href } = name;
 
@@ -17,6 +20,21 @@ const Reading = ({ data, chapters }) => {
   const [listChapter, setListChapter] = useState(chapters);
 
   const [inputSearch, setInputSearch] = useState("");
+  const readRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(
+      updateList({
+        image: image,
+        href_manga: href,
+        manga: name_detail,
+        chapterObj: {
+          chapter: chapter.slice(2),
+          href_chapter: href_chapter,
+        },
+      })
+    );
+  }, [chapter, dispatch, href, href_chapter, image, name_detail]);
 
   useEffect(() => {
     if (inputSearch.length !== 0) {
@@ -196,7 +214,10 @@ const Reading = ({ data, chapters }) => {
         )}
       </div>
 
-      <div className="w-full py-2 bg-black flex flex-col items-center desktop:px-32">
+      <div
+        ref={readRef}
+        className="w-full py-2 bg-black flex flex-col items-center desktop:px-32"
+      >
         {pages &&
           pages.map((item, index) => {
             return (
